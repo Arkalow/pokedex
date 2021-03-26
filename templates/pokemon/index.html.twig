@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des pokemons{% endblock %}
+
+{% block body %}
+    <h1>Liste des pokemons</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Numero</th>
+                <th>Nom</th>
+                <th>Vie</th>
+                <th>Attaque</th>
+                <th>Defense</th>
+                <th>Legendaire</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pokemon in pokemon %}
+            <tr>
+                <td>{{ pokemon.numero }}</td>
+                <td>{{ pokemon.nom }}</td>
+                <td>{{ pokemon.vie }}</td>
+                <td>{{ pokemon.attaque }}</td>
+                <td>{{ pokemon.defense }}</td>
+                <td>{{ pokemon.legendaire ? 'Oui' : 'Non' }}</td>
+                <td>
+                    <a href="{{ path('pokemon_show', {'id': pokemon.id}) }}">Afficher</a>
+                    <a href="{{ path('pokemon_edit', {'id': pokemon.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8"><span class="muted">Aucun pokemon pour l'instant</span></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('pokemon_new') }}">Valider</a>
+{% endblock %}
