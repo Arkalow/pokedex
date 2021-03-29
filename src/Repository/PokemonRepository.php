@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Pokemon;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @method Pokemon|null find($id, $lockMode = null, $lockVersion = null)
@@ -47,4 +49,49 @@ class PokemonRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /**
+      * Récupère une liste de pokemons paginés et triés par date de création.
+      *
+      * @param int $page Le numéro de la page
+      * @param int $nbMaxByPage Nombre maximum de pokemons par page     
+      *
+      * @throws InvalidArgumentException
+      * @throws NotFoundHttpException
+      *
+      * @return Paginator
+      */
+    public function findAllPagedAndSorted($page, $nbMaxByPage)
+    {
+        if (!is_numeric($page)) {
+            throw new InvalidArgumentException(
+                'La valeur de l\'argument $page est incorrecte (valeur : ' . $page . ').'
+            );
+        }
+
+        if ($page < 1) {
+            throw new NotFoundHttpException('La page demandée n\'existe pas');
+        }
+
+        if (!is_numeric($nbMaxByPage)) {
+            throw new InvalidArgumentException(
+                'La valeur de l\'argument $nbMaxParPage est incorrecte (valeur : ' . $nbMaxByPage . ').'
+            );
+        }
+
+        $qb = $this->createQueryBuilder('pokemon')
+            ->orderBy('pokemon.numero', 'ASC');
+
+        $query = $qb->getQuery();
+
+        $firstResult = ($page - 1) * $nbMaxByPage;
+        $query->setFirstResult($firstResult)->setMaxResults($nbMaxByPage);
+        $paginator = new Paginator($query);
+
+        if ( ($paginator->count() <= $firstResult) && $page != 1) {
+            throw new NotFoundHttpException('La page demandée n\'existe pas.'); // page 404, sauf pour la première page
+        }
+
+        return $paginator;
+    }
 }

@@ -16,12 +16,29 @@ use Symfony\Component\Routing\Annotation\Route;
 class PokemonController extends AbstractController
 {
     /**
-     * @Route("/", name="pokemon_index", methods={"GET"})
-     */
-    public function index(PokemonRepository $pokemonRepository): Response
+      * Liste les pokemons triés par date de création pour une page.
+      *
+      * @Route("/{page}", requirements={"page" = "\d+"}, name="pokemon_index", methods={"GET"})
+      *
+      * @param int $page Le numéro de la page (par defaut 1)
+      *
+      */
+    public function index(int $page = 1, PokemonRepository $pokemonRepository): Response
     {
+        $nbPokemonByPage = $this->getParameter('NB_POKEMON_BY_PAGE');
+
+        $pokemons = $pokemonRepository->findAllPagedAndSorted($page, $nbPokemonByPage);
+
+        $pagination = array(
+            'page' => $page,
+            'nbPages' => ceil(count($pokemons) / $nbPokemonByPage),
+            'nomRoute' => 'pokemon_index',
+            'paramsRoute' => array()
+        );
+
         return $this->render('pokemon/index.html.twig', [
-            'pokemon' => $pokemonRepository->findAll(),
+            'pokemons' => $pokemons,
+            'pagination' => $pagination
         ]);
     }
 
@@ -49,7 +66,7 @@ class PokemonController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="pokemon_show", methods={"GET"})
+     * @Route("/{id}/show", name="pokemon_show", methods={"GET"})
      */
     public function show(Pokemon $pokemon): Response
     {

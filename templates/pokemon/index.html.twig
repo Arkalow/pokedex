@@ -18,7 +18,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for pokemon in pokemon %}
+        {% for pokemon in pokemons %}
             <tr>
                 <td>{{ pokemon.numero }}</td>
                 <td>{{ pokemon.nom }}</td>
@@ -27,8 +27,8 @@
                 <td>{{ pokemon.defense }}</td>
                 <td>{{ pokemon.legendaire ? 'Oui' : 'Non' }}</td>
                 <td>
-                    <a href="{{ path('pokemon_show', {'id': pokemon.id}) }}">Afficher</a>
-                    <a href="{{ path('pokemon_edit', {'id': pokemon.id}) }}">Modifier</a>
+                    <a class="btn btn-success" href="{{ path('pokemon_show', {'id': pokemon.id}) }}">Afficher</a>
+                    <a class="btn btn-info" href="{{ path('pokemon_edit', {'id': pokemon.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -40,4 +40,30 @@
     </table>
 
     <a class="btn btn-primary" href="{{ path('pokemon_new') }}">Valider</a>
+
+
+
+    {% if pagination.nbPages > 0 %}
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if pagination.page > 1 %}
+                    <li class="page-item"><a class="page-link" href="{{ path(pagination.nomRoute, pagination.paramsRoute|merge({'page': 1})) }}">Debut</a></li>
+                    <li class="page-item"><a class="page-link" href="{{ path(pagination.nomRoute,
+                        pagination.paramsRoute|merge({'page': pagination.page-1})) }}">Précédent</a></li>
+                {% endif %}
+                {% for p in range(max(pagination.page-4, 1), min(pagination.page+4, pagination.nbPages)) %}
+                    <li class="page-item {% if p == pagination.page %}active{% endif %}"><a class="page-link" href="{{ path(pagination.nomRoute, pagination.paramsRoute|merge({'page': p})) }}">{{p}}</a></li>
+                {% endfor %}
+                {% if pagination.page < pagination.nbPages %}
+                    <li class="page-item"><a class="page-link" href="{{ path(pagination.nomRoute,
+                        pagination.paramsRoute|merge({'page': pagination.page+1})) }}">Suivant</a></li>
+                    <li class="page-item"><a class="page-link" href="{{ path(pagination.nomRoute,
+                        pagination.paramsRoute|merge({'page': pagination.nbPages})) }}">Fin</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+    {% endif %}
+
 {% endblock %}
