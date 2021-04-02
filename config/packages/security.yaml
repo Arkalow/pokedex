@@ -38,6 +38,7 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/[0-9]+$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/[0-9]+/show$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/[0-9]+$/edit, roles: ROLE_ADMIN }
         - { path: ^/[0-9]+$/delete, roles: ROLE_ADMIN }
