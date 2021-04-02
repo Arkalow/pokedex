@@ -3,10 +3,18 @@
 namespace App\Entity;
 
 use App\Repository\PokemonRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * @ORM\Entity(repositoryClass=PokemonRepository::class)
+ *
+ * @ApiResource(
+ *       normalizationContext={"groups"={"pokemon"}},
+ *       paginationEnabled=false
+ * )
  */
 class Pokemon
 {
@@ -14,52 +22,62 @@ class Pokemon
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"pokemon", "generation", "type"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"pokemon", "generation", "type"})
      */
     private $numero;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"pokemon", "generation", "type"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"pokemon"})
      */
     private $vie;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"pokemon"})
      */
     private $attaque;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"pokemon"})
      */
     private $defense;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"pokemon"})
      */
     private $legendaire;
 
     /**
      * @ORM\ManyToOne(targetEntity=Type::class, inversedBy="pokemon")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"pokemon"})
      */
     private $type1;
 
     /**
      * @ORM\ManyToOne(targetEntity=Type::class, inversedBy="pokemon2")
+     * @Groups({"pokemon"})
      */
     private $type2;
 
     /**
      * @ORM\ManyToOne(targetEntity=Generation::class, inversedBy="pokemon")
+     * @Groups({"pokemon"})
      */
     private $generation;
 

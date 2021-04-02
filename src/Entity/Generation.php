@@ -6,9 +6,16 @@ use App\Repository\GenerationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=GenerationRepository::class)
+ *
+ * @ApiResource(
+ *       normalizationContext={"groups"={"generation"}},
+ *       paginationEnabled=false
+ * )
  */
 class Generation
 {
@@ -16,11 +23,13 @@ class Generation
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"pokemon", "type", "generation"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"pokemon", "type", "generation"})
      */
     private $name;
 
