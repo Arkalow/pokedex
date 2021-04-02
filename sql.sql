@@ -1,4 +1,4 @@
-SELECT * , SUM(coeff) AS total
+SELECT *, SUM(coeff) AS total
 FROM ( 
 	SELECT *, 2 as coeff
 	FROM pokemon 

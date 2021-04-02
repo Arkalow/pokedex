@@ -3,8 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Pokemon;
+use App\Entity\Type;
+use App\Entity\Generation;
 use App\Form\PokemonType;
 use App\Repository\PokemonRepository;
+use App\Repository\TypeRepository;
+use App\Repository\GenerationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,11 +27,13 @@ class PokemonController extends AbstractController
       * @param int $page Le numéro de la page (par defaut 1)
       *
       */
-    public function index(int $page = 1, PokemonRepository $pokemonRepository): Response
+    public function index(int $page = 1, PokemonRepository $pokemonRepository, TypeRepository $typeRepository, GenerationRepository $generationRepository): Response
     {
+
         $nbPokemonByPage = $this->getParameter('NB_POKEMON_BY_PAGE');
 
-        $pokemons = $pokemonRepository->findAllPagedAndSorted($page, $nbPokemonByPage);
+
+        $pokemons = $pokemonRepository->findAllPagedAndSorted($page, $nbPokemonByPage, ['nom' => '%bul%', 'type2' => ['Grass']]);
 
         $pagination = array(
             'page' => $page,
@@ -36,9 +42,14 @@ class PokemonController extends AbstractController
             'paramsRoute' => array()
         );
 
+        $types = $typeRepository->findBy([], ['name' => 'ASC']);
+        $generations = $generationRepository->findBy([], ['name' => 'ASC']);
+
         return $this->render('pokemon/index.html.twig', [
             'pokemons' => $pokemons,
-            'pagination' => $pagination
+            'pagination' => $pagination,
+            'types' => $types,
+            'generations' => $generations,
         ]);
     }
 

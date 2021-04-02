@@ -66,6 +66,8 @@ class Import extends Command
 
         unset($lines[0]);
 
+        // $lines = array_slice($lines, 0, 10);
+        
         $error = 0; // number of error
         foreach ($lines as $key => $line)
         {
@@ -80,22 +82,27 @@ class Import extends Command
                 $generation = new Generation();
                 $generation->setName($data[11]);
             }
-            $type1 = $this->typeRepository->findOneBy(['name' => $data[2]]);
-            if ($type1 == null) {
-                $type1 = new Type();
-                $type1->setName($data[2]);
+            if($data[2] != "") {
+                $type1 = $this->typeRepository->findOneBy(['name' => $data[2]]);
+                if ($type1 == null) {
+                    $type1 = new Type();
+                    $type1->setName($data[2]);
+                }
             }
-            $type2 = $this->typeRepository->findOneBy(['name' => $data[3]]);
-            if ($type2 == null) {
-                $type2 = new Type();
-                $type2->setName($data[3]);
+            if($data[3] != "") {
+                $type2 = $this->typeRepository->findOneBy(['name' => $data[3]]);
+                if ($type2 == null) {
+                    $type2 = new Type();
+                    $type2->setName($data[3]);
+                }
             }
 
             $pokemon = new Pokemon();
             $pokemon->setNumero($data[0]);
             $pokemon->setNom($data[1]);
-            $pokemon->setType1($type1);
-            $pokemon->setType2($type2);
+            if (isset($type1)) $pokemon->setType1($type1);
+            if (isset($type2)) $pokemon->setType2($type2);
+            $pokemon->setGeneration($generation);
             $pokemon->setVie($data[5]);
             $pokemon->setAttaque($data[6]);
             $pokemon->setDefense($data[7]);
@@ -109,15 +116,16 @@ class Import extends Command
 
             $output->writeln($key . ' - ' . $data[1]);
             
+            try{
+                $this->entityManager->flush();
+            } catch(\Exception $e){
+                $errorMessage = $e->getMessage();
+                dump($errorMessage());
+                $error++;
+            }
+            
         }
 
-        try{
-            $this->entityManager->flush();
-        } catch(\Exception $e){
-            $errorMessage = $e->getMessage();
-            dump($errorMessage());
-            $error++;
-        }
 
         $output->writeln($nbPokemon - $error . " pokemons(s) add and $error error(s)");
 
