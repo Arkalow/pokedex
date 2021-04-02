@@ -27,7 +27,7 @@ class PokemonController extends AbstractController
       * @param int $page Le numéro de la page (par defaut 1)
       *
       */
-    public function index(int $page = 1, PokemonRepository $pokemonRepository, TypeRepository $typeRepository, GenerationRepository $generationRepository): Response
+    public function index(Request $request, int $page = 1, PokemonRepository $pokemonRepository, TypeRepository $typeRepository, GenerationRepository $generationRepository): Response
     {
 
         $nbPokemonByPage = $this->getParameter('NB_POKEMON_BY_PAGE');
@@ -37,14 +37,14 @@ class PokemonController extends AbstractController
         $generation = null;
         $legendaire = null;
 
-        if (isset($_POST['search'])) 
+        if ($request->getMethod() == 'POST')
         {
             // Validation du formulaire de recherche
-            if (isset($_POST['name'])) $name = trim($_POST['name']);
-            if (isset($_POST['type'])) $type = trim($_POST['type']);
-            if (isset($_POST['generation'])) $generation = trim($_POST['generation']);
-            if (isset($_POST['legendaire'])) {
-                $legendaire = ($_POST['legendaire'] == "1") ? true : false;
+            if ($request->request->get('name') != null) $name = trim($request->request->get('name'));
+            if ($request->request->get('type') != null) $type = trim($request->request->get('type'));
+            if ($request->request->get('generation') != null) $generation = trim($request->request->get('generation'));
+            if ($request->request->get('legendaire') != null) {
+                $legendaire = ($request->request->get('legendaire') == "1") ? true : false;
             }
         }
 
@@ -128,7 +128,7 @@ class PokemonController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="pokemon_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="pokemon_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Pokemon $pokemon): Response
     {
