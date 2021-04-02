@@ -1,47 +1,45 @@
-<form class="border border-success" style="padding: 20px; ">
+<form class="border border-success" action="" method="POST" style="padding: 20px; ">
 	<div class="form-group row">
 		<label for="inputEmail3" class="col-sm-2 col-form-label">Nom du pokemon</label>
 		<div class="col-sm-10">
-			<input type="text" class="form-control" name="nom" placeholder="Nom">
+			<input type="text" class="form-control" name="name" placeholder="Nom" {% if filter.name is not null %} value="{{ filter.name }}" {% endif %}>
 		</div>
 	</div>
 	<fieldset class="form-group row">
 		<div class="col-sm-2">Generation</div>
 		<div class="col-sm-10">
-			<div class="row">
-			{% for i, generation in generations %}
-				<div class="col-sm-4">
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" name="generation-{{ generation.name }}" checked>
-						<label class="form-check-label" for="generation-{{ generation.name }}">
-							{{ generation.name }}
-						</label>
-					</div>
-				</div>
+			<select class="form-select" aria-label="Generation" name="generation">
+				<option value="">Génération</option>
+				{% for generation in generations %}
+					<option value="{{ generation.id }}" {% if filter.generation == generation.id %} selected {% endif %}>{{ generation.name }}</option>
 				{% endfor %}
-			</div>
+			</select>
 		</div>
 	</fieldset>
 	<fieldset class="form-group row">
 		<div class="col-sm-2">Type</div>
 		<div class="col-sm-10">
-			<div class="row">
-			{% for i, type in types %}
-				<div class="col-sm-4">
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" name="type-{{ type.name }}" checked>
-						<label class="form-check-label" for="ype-{{ type.name }}">
-							{{ type.name }}
-						</label>
-					</div>
-				</div>
+			<select class="form-select" aria-label="Type" name="type">
+				<option value="">Type</option>
+				{% for type in types %}
+					<option value="{{ type.id }}" {% if filter.type == type.id %} selected {% endif %}>{{ type.name }}</option>
 				{% endfor %}
-			</div>
+			</select>
+		</div>
+	</fieldset>
+	<fieldset class="form-group row">
+		<div class="col-sm-2">Legendaire</div>
+		<div class="col-sm-10">
+			<select class="form-select" aria-label="Legendaire" name="legendaire">
+				<option value="">Legendaire</option>
+				<option value="1" {% if filter.legendaire == true %} selected {% endif %}>Oui</option>
+				<option value="0" {% if filter.legendaire is not null and filter.legendaire == false %} selected {% endif %}>Non</option>
+			</select>
 		</div>
 	</fieldset>
 	<div class="form-group row">
 		<div class="col-sm-10">
-			<button type="submit" class="btn btn-primary">Rechercher</button>
+			<button name="search" type="submit" class="btn btn-primary">Rechercher</button>
 		</div>
 	</div>
 </form>

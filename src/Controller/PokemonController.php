@@ -22,7 +22,7 @@ class PokemonController extends AbstractController
     /**
       * Liste les pokemons triés par date de création pour une page.
       *
-      * @Route("/{page}", requirements={"page" = "\d+"}, name="pokemon_index", methods={"GET"})
+      * @Route("/{page}", requirements={"page" = "\d+"}, name="pokemon_index", methods={"GET", "POST"})
       *
       * @param int $page Le numéro de la page (par defaut 1)
       *
@@ -32,8 +32,23 @@ class PokemonController extends AbstractController
 
         $nbPokemonByPage = $this->getParameter('NB_POKEMON_BY_PAGE');
 
+        $name = null;
+        $type = null;
+        $generation = null;
+        $legendaire = null;
 
-        $pokemons = $pokemonRepository->findAllPagedAndSorted($page, $nbPokemonByPage, ['nom' => '%bul%', 'type2' => ['Grass']]);
+        if (isset($_POST['search'])) 
+        {
+            // Validation du formulaire de recherche
+            if (isset($_POST['name'])) $name = trim($_POST['name']);
+            if (isset($_POST['type'])) $type = trim($_POST['type']);
+            if (isset($_POST['generation'])) $generation = trim($_POST['generation']);
+            if (isset($_POST['legendaire'])) {
+                $legendaire = ($_POST['legendaire'] == "1") ? true : false;
+            }
+        }
+
+        $pokemons = $pokemonRepository->findAllPagedAndSorted($page, $nbPokemonByPage, $name, $type, $generation, $legendaire);
 
         $pagination = array(
             'page' => $page,
@@ -50,6 +65,12 @@ class PokemonController extends AbstractController
             'pagination' => $pagination,
             'types' => $types,
             'generations' => $generations,
+            'filter' => [
+                'name' => $name,
+                'type' => $type,
+                'generation' => $generation,
+                'legendaire' => $legendaire,
+            ],
         ]);
     }
 

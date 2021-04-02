@@ -59,7 +59,7 @@ class PokemonRepository extends ServiceEntityRepository
       *
       * @return Paginator
       */
-    public function findAllPagedAndSorted($page, $nbMaxByPage, $filters = [])
+    public function findAllPagedAndSorted($page, $nbMaxByPage, $name = null, $type = null, $generation = null, $legendaire = null)
     {
         if (!is_numeric($page)) {
             throw new InvalidArgumentException(
@@ -77,63 +77,37 @@ class PokemonRepository extends ServiceEntityRepository
             );
         }
 
-        /*
-            filters = [
-                'name' => '%azeaze%',
-                'type' => [ 'azeazeaze', 'azeazeaze', 'azeazeaze' ],
-                'generation' => [ 'azeazeaze', 'azeazeaze', 'azeazeaze' ],
-            ]
-        */
-
         $qb = $this->createQueryBuilder('pokemon');
 
-
-        $qb->leftJoin('pokemon.generation', 'generation');
-        $qb->leftJoin('pokemon.type1', 'type1');
-        $qb->leftJoin('pokemon.type2', 'type2');
-
-        if (!isset($filters['generation'])) $filters['generation'] = [];
-
-
-        if (isset($filters['type1']) AND isset($filters['type2'])) {
-            $filters['type'] = array_merge($filters['type1'], $filters['type2']);   
-            $filters['type1'];
-            $filters['type2'];         
-        } else if(isset($filters['type1'])) {
-            $filters['type'] = $filters['type1'];
-            unset($filters['type1']);
-        } else if(isset($filters['type2'])) {
-            $filters['type'] = $filters['type2'];
-            unset($filters['type2']);
+        if ($name != null) {
+            $qb->andWhere("pokemon.nom LIKE :name");
+            $qb->setParameter("name", "%$name%");
         }
 
-        foreach ($filters as $key => $filter) 
-        {
-            if (is_array($filter)) {
+        if ($legendaire != null) {
+            $qb->andWhere("pokemon.legendaire LIKE :legendaire");
+            $qb->setParameter("legendaire", $legendaire);
+        }
 
-                $sql = "";
-                foreach ($filter as $i => $value) {
-                    $sql .= "$key.name = :$key$i OR";
-                }
-
-                $sql = substr($sql, 0, strlen($sql) - 3);
-
-                $qb->andWhere($sql);
-
-                foreach ($filter as $i => $value) {
-                    $qb->setParameter("$key$i", $value);
-                }
-
-            } else {
-
-                $qb->andWhere("pokemon.$key LIKE :$key");
-                $qb->setParameter("$key", $filter);
-
-            }
+        if ($type != null) {
+            $qb->leftJoin('pokemon.type1', 'type1');
+            $qb->leftJoin('pokemon.type2', 'type2');
             
+            $qb->andWhere("type1.id LIKE :type OR type2.id LIKE :type");
+            $qb->setParameter("type", "$type");   
+
+        }
+
+        if ($generation != null) {
+            $qb->leftJoin('pokemon.generation', 'generation');
+            
+            $qb->andWhere("generation.id LIKE :generation");
+            $qb->setParameter("generation", "$generation");   
+
         }
         
         $qb->orderBy('pokemon.numero', 'ASC');
+
 
         $query = $qb->getQuery();
 
