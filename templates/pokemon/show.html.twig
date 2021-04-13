@@ -5,6 +5,9 @@
 {% block body %}
     <h1>Pokemon {{ pokemon.nom }}</h1>
 
+    {% if not pokemon.imageName == "" %}
+        <img src="{{ vich_uploader_asset(pokemon, 'imageFile')|imagine_filter('carre')  }}" alt="Image">
+    {% endif %}
     <table class="table">
         <tbody>
             <tr>
@@ -30,9 +33,6 @@
             <tr>
                 <th>Legendaire</th>
                 <td>{{ pokemon.legendaire ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Image</th>
             </tr>
         </tbody>
     </table>

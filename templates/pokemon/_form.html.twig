@@ -46,6 +46,14 @@
 	    'label_attr': {'class': 'form-check-label'}
 	}) }}
 	</div>
+	
+	{{ form_label(form.imageFile, 'Image', {
+	    'label_attr': {'class': 'form-label'}
+	}) }}
+	{{ form_widget(form.imageFile, { 'attr': {'class': 'form-control'} }) }}
+	
 	<br>
+
+
     <button class="btn btn-success">{{ button_label|default('Ajouter un pokemon') }}</button>
 {{ form_end(form) }}

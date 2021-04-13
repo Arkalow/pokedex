@@ -26,11 +26,11 @@ class PokemonType extends AbstractType
             ->add('imageFile', VichImageType::class, [
                 'required' => false,
                 'allow_delete' => true,
-                'delete_label' => '...',
-                'download_label' => '...',
+                'delete_label' => 'Supprimer',
+                'download_label' => 'Télécharger',
                 'download_uri' => true,
                 'image_uri' => true,
-                'imagine_pattern' => '...',
+                'imagine_pattern' => 'carre',
                 'asset_helper' => true,
             ])
         ;
