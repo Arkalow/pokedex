@@ -1,0 +1,59 @@
+{{ form_start(form) }}
+	{{ form_label(form.numero, 'Numero', {
+	    'label_attr': {'class': 'form-label'}
+	}) }}
+	{{ form_widget(form.numero, { 'attr': {'class': 'form-control'} }) }}
+
+	{{ form_label(form.nom, 'Nom', {
+	    'label_attr': {'class': 'form-label'}
+	}) }}
+	{{ form_widget(form.nom, { 'attr': {'class': 'form-control'} }) }}
+
+	{{ form_label(form.vie, 'Vie', {
+	    'label_attr': {'class': 'form-label'}
+	}) }}
+	{{ form_widget(form.vie, { 'attr': {'class': 'form-control'} }) }}
+
+	{{ form_label(form.attaque, 'Attaque', {
+	    'label_attr': {'class': 'form-label'}
+	}) }}
+	{{ form_widget(form.attaque, { 'attr': {'class': 'form-control'} }) }}
+
+	{{ form_label(form.defense, 'Défense', {
+	    'label_attr': {'class': 'form-label'}
+	}) }}
+	{{ form_widget(form.defense, { 'attr': {'class': 'form-control'} }) }}
+
+	{{ form_label(form.type1, 'Type1', {
+	    'label_attr': {'class': 'form-label'}
+	}) }}
+	{{ form_widget(form.type1, { 'attr': {'class': 'form-control'} }) }}
+
+	{{ form_label(form.type2, 'Type2', {
+	    'label_attr': {'class': 'form-label'}
+	}) }}
+	{{ form_widget(form.type2, { 'attr': {'class': 'form-control'} }) }}
+	
+	{{ form_label(form.generation, 'Génération', {
+	    'label_attr': {'class': 'form-label'}
+	}) }}
+	{{ form_widget(form.generation, { 'attr': {'class': 'form-control'} }) }}
+	<br>
+	<div class="form-check">
+	{{ form_widget(form.legendaire, { 'attr': {'class': 'form-check-input'} }) }}
+
+	{{ form_label(form.legendaire, 'Légendaire', {
+	    'label_attr': {'class': 'form-check-label'}
+	}) }}
+	</div>
+	
+	{{ form_label(form.imageFile, 'Image', {
+	    'label_attr': {'class': 'form-label'}
+	}) }}
+	{{ form_widget(form.imageFile, { 'attr': {'class': 'form-control'} }) }}
+	
+	<br>
+
+
+    <button class="btn btn-success">{{ button_label|default('Ajouter un pokemon') }}</button>
+{{ form_end(form) }}

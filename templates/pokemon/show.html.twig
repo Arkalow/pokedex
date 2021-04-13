@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pokemon {{ pokemon.nom }}{% endblock %}
+
+{% block body %}
+    <h1>Pokemon {{ pokemon.nom }}</h1>
+
+    {% if not pokemon.imageName == "" %}
+        <img src="{{ vich_uploader_asset(pokemon, 'imageFile')|imagine_filter('carre')  }}" alt="Image">
+    {% endif %}
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Numero</th>
+                <td>{{ pokemon.numero }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ pokemon.nom }}</td>
+            </tr>
+            <tr>
+                <th>Vie</th>
+                <td>{{ pokemon.vie }}</td>
+            </tr>
+            <tr>
+                <th>Attaque</th>
+                <td>{{ pokemon.attaque }}</td>
+            </tr>
+            <tr>
+                <th>Defense</th>
+                <td>{{ pokemon.defense }}</td>
+            </tr>
+            <tr>
+                <th>Legendaire</th>
+                <td>{{ pokemon.legendaire ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-secondary" href="{{ path('pokemon_index') }}">Retour à la liste des pokemons</a>
+
+    <a class="btn btn-warning" href="{{ path('pokemon_edit', {'id': pokemon.id}) }}">Modifier</a>
+
+    {{ include('pokemon/_delete_form.html.twig') }}
+    
+{% endblock %}
