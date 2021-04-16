@@ -2,6 +2,10 @@
 
 Ce projet est un TP de l'esiee d'Amiens
 
+![pokemon](pokemon_index.png)
+
+![pokemon](pokemon_show.png)
+
 ## Script d'installation
 
 Pour installer le projet vous pouvez suivre les étapes classique ou lancer ce script d'installation
