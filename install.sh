@@ -20,10 +20,16 @@ cp .env.dist .env
 
 php bin/console d:d:c
 
+php bin/console m:migration
+
 php bin/console d:m:m
 
-cat nginx.config > /etc/nginx/sites-available/default
+cat nginx.conf > /etc/nginx/sites-available/default
 
 systemctl restart nginx
 
 chown www-data:www-data -R /var/www/html/webapp/
+
+RAJOUTER LE PHP-FPM CONF DE MREDE
+
+php bin/console import:pokemon

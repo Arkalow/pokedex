@@ -7,7 +7,7 @@ Ce projet est un TP de l'esiee d'Amiens
 Pour installer le projet vous pouvez suivre les étapes classique ou lancer ce script d'installation
 
 ```
-
+curl https://git.arkalo.ovh/Omer/project/raw/branch/master/install.sh | bash
 ```
 
 ## Installation
@@ -38,9 +38,14 @@ Editez le fichier `.env` avec vos infos d'environements (database, constantes...
 
 > N'oubliez pas de remplir le fichier d'environment avant de procéder à cette étape
 
+```
+php bin/console d:d:c
+```
+
 Appliquer les migrations
 
 ```shell
+php bin/console m:migration
 php bin/console d:m:m
 ```
 
